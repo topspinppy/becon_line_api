@@ -1,13 +1,14 @@
 const bodyParser = require('body-parser')
 const request = require('request')
 const express = require('express')
+const axios = require('axios')
 
 const app = express()
 const port = process.env.PORT || 4000
 const hostname = '127.0.0.1'
 const HEADERS = {
 	'Content-Type': 'application/json',
-	'Authorization': 'Bearer P9C/nwlzPGu6MosX6+RciW64420+qOxchdn6a7ftsDY5B10aa9AjG1q9kLB/c7i7ByXt1NSSb1wN3r7APQzxNiPV0IvrvUcfYv7OKIYbn2WhqGfwF83DCPGgXIBqRE3b6jREkL5ogU+HxfidIRtrpwdB04t89/1O/w1cDnyilFU='
+	'Authorization': 'Bearer HUWzoOZ9yNeWTjO3I9yWCC7NeY0nKnjV9kh8fVhCqhwpKQ//1vYUIbTAnuY2pSHrtBI45IfcgD2j8ft2/8N5Rzl7frDbcafwBLPEVK+aJOVY6bBUS+MlRlggZA4RD3eS4n/5WnEc+0qNQYdgCSLesgdB04t89/1O/w1cDnyilFU='
 }
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -22,17 +23,22 @@ app.get('/webhook', (req, res) => {
 })
 
 // Reply
-app.post('/webhook', (req, res) => {
+app.post('/webhook', async (req, res) => {
 	// reply block
 	let reply_token = req.body.events[0].replyToken
-	// let msg = req.body.events[0].message.text
-	reply(reply_token, JSON.stringify(req.body.events[0]))
+	let json_becon = req.body.events[0];
+	if (req.body.events[0].type === 'beacon') {
+		reply(reply_token, JSON.stringify(json_becon))
+		let response = await axios.post('http://202.139.192.106:8080/line/putSanam', `data => ${req.body.events[0]}`)
+	} else {
+		reply(reply_token, "d")
+	}
 })
 
 function push(msg) {
 	let body = JSON.stringify({
 		// push body
-		to: 'U620e885e5c6b4b242041d92911061d5d',
+		to: 'U52ddc37ec3c5fb7cf23e2c106ad3bb2a',
 		messages: [
 			{
 				type: 'text',
