@@ -2,12 +2,14 @@ const bodyParser = require('body-parser')
 const request = require('request')
 const express = require('express')
 const axios = require('axios')
+const moment = require('moment')
+
 
 const app = express()
 const port = process.env.PORT || 4000
 const HEADERS = {
 	'Content-Type': 'application/json',
-	'Authorization': 'Bearer HUWzoOZ9yNeWTjO3I9yWCC7NeY0nKnjV9kh8fVhCqhwpKQ//1vYUIbTAnuY2pSHrtBI45IfcgD2j8ft2/8N5Rzl7frDbcafwBLPEVK+aJOVY6bBUS+MlRlggZA4RD3eS4n/5WnEc+0qNQYdgCSLesgdB04t89/1O/w1cDnyilFU='
+	'Authorization': 'Bearer m773xgH1gU3m8t+PSceOavPKpB2tVU2x9qG0BCMaqsHQPGUTvqySuCylpCt2V4pEtBI45IfcgD2j8ft2/8N5Rzl7frDbcafwBLPEVK+aJOUEFYK6kj+z7IaHYOfGD6Bs/pAdc/C1ejy5zHqqej/L2AdB04t89/1O/w1cDnyilFU='
 }
 
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -26,11 +28,22 @@ app.post('/webhook', async (req, res) => {
 	// reply block
 	let reply_token = req.body.events[0].replyToken
 	let json_becon = req.body.events[0];
-	if (req.body.events[0].type === 'beacon') {
-		reply(reply_token, JSON.stringify(json_becon))
-		let response = await axios.post('http://202.139.192.106:8080/line/putSanam', `data => ${req.body.events[0]}`)
+	console.log(json_becon)
+	if (json_becon.type === 'beacon') {
+		let newObj = {
+			"beacon": {
+				"datetime": moment().format('YYYY-MM-DD hh:mm:ss'),
+				"status": req.body.events[0].beacon.type,
+			}
+		}
+		reply(reply_token, json_becon)
+		await axios.post('http://202.139.192.106:8080/line/putSanam', newObj)
+	} else if (json_becon.message.text === 'Admin_Mon') {
+		let responses = await axios.get('http://202.139.192.106:8080/line/adminMon')
+		let dataSendToLine = ` จำนวนคนเข้าชม : ${responses.data.beacons.p_in} ${"\n"} จำนวนคนออก : ${responses.data.beacons.p_out} ${"\n"} อุณหภูมิ : ${responses.data.sensors.Temperature} ${"\n"} ความชื้น : ${responses.data.sensors.Humidity}`
+		reply(reply_token, dataSendToLine)
 	} else {
-		reply(reply_token, "d")
+		reply(reply_token,"แอบมองเธออยู่นะจ๊ะ")
 	}
 })
 
