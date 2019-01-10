@@ -36,8 +36,10 @@ app.post('/webhook', async (req, res) => {
 				"status": req.body.events[0].beacon.type,
 			}
 		}
-		reply(reply_token, json_becon)
-		await axios.post('http://202.139.192.106:8080/line/putSanam', newObj)
+		let res = await axios.post('http://202.139.192.106:8080/line/putSanam', newObj)
+		
+		reply(reply_token, JSON.stringify(res))
+		
 	} else if (json_becon.message.text === 'Admin_Mon') {
 		let responses = await axios.get('http://202.139.192.106:8080/line/adminMon')
 		let dataSendToLine = ` จำนวนคนเข้าชม : ${responses.data.beacons.p_in} ${"\n"} จำนวนคนออก : ${responses.data.beacons.p_out} ${"\n"} อุณหภูมิ : ${responses.data.sensors.Temperature} ${"\n"} ความชื้น : ${responses.data.sensors.Humidity}`
