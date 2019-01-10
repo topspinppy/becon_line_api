@@ -6,20 +6,12 @@
   "scripts": {
     "start": "node app.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/linedevth/LINE-Bot-101-Node.git"
-  },
   "keywords": [
     "linebot",
     "linechatbot"
   ],
   "author": "Jirawatee",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/linedevth/LINE-Bot-101-Node/issues"
-  },
-  "homepage": "https://github.com/linedevth/LINE-Bot-101-Node#readme",
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
