@@ -4,8 +4,8 @@ const express = require('express')
 const axios = require('axios')
 
 const app = express()
-const port = process.env.PORT || 4000
-const hostname = 'line-bot-tesa-nernhom400.herokuapp.com'
+const port = process.env.PORT || 80
+const hostname = 'https://line-bot-tesa-nernhom400.herokuapp.com'
 const HEADERS = {
 	'Content-Type': 'application/json',
 	'Authorization': 'Bearer HUWzoOZ9yNeWTjO3I9yWCC7NeY0nKnjV9kh8fVhCqhwpKQ//1vYUIbTAnuY2pSHrtBI45IfcgD2j8ft2/8N5Rzl7frDbcafwBLPEVK+aJOVY6bBUS+MlRlggZA4RD3eS4n/5WnEc+0qNQYdgCSLesgdB04t89/1O/w1cDnyilFU='
@@ -74,5 +74,5 @@ function curl(method, body) {
 }
 
 app.listen(port, hostname, () => {
-	console.log(`Server running at http://${hostname}:${port}/`)
+	console.log(`Server running at https://${hostname}:${port}/`)
 })
